@@ -1,0 +1,120 @@
+CREATE TABLE Secteur(
+   id_secteur INT,
+   libelle_secteur VARCHAR(50) NOT NULL,
+   PRIMARY KEY(id_secteur),
+   UNIQUE(libelle_secteur)
+);
+
+CREATE TABLE Liaison(
+   id_liaison INT,
+   distance DOUBLE NOT NULL,
+   port_depart VARCHAR(50) NOT NULL,
+   port_arrivee VARCHAR(50) NOT NULL,
+   id_secteur INT NOT NULL,
+   PRIMARY KEY(id_liaison),
+   FOREIGN KEY(id_secteur) REFERENCES Secteur(id_secteur)
+);
+
+CREATE TABLE Categorie(
+   id_categorie INT,
+   libelle_categorie VARCHAR(50) NOT NULL,
+   PRIMARY KEY(id_categorie),
+   UNIQUE(libelle_categorie)
+);
+
+CREATE TABLE Type(
+   id_type INT,
+   libelle_type VARCHAR(50) NOT NULL,
+   id_categorie INT NOT NULL,
+   PRIMARY KEY(id_type),
+   UNIQUE(libelle_type),
+   FOREIGN KEY(id_categorie) REFERENCES Categorie(id_categorie)
+);
+
+CREATE TABLE Periode(
+   id_periode INT,
+   debut DATE NOT NULL,
+   fin DATE NOT NULL,
+   PRIMARY KEY(id_periode)
+);
+
+CREATE TABLE Tarif(
+   id_tarif INT,
+   prix DOUBLE NOT NULL,
+   id_liaison INT NOT NULL,
+   id_periode INT NOT NULL,
+   id_type INT NOT NULL,
+   PRIMARY KEY(id_tarif),
+   FOREIGN KEY(id_liaison) REFERENCES Liaison(id_liaison),
+   FOREIGN KEY(id_periode) REFERENCES Periode(id_periode),
+   FOREIGN KEY(id_type) REFERENCES Type(id_type)
+);
+
+CREATE TABLE Bateau(
+   id_bateau INT,
+   libelle_bateau VARCHAR(50) NOT NULL,
+   longueur DOUBLE,
+   largeur DOUBLE,
+   vitesse INT,
+   capaciteMaximum INT NOT NULL,
+   PRIMARY KEY(id_bateau),
+   UNIQUE(libelle_bateau)
+);
+
+CREATE TABLE Equipement(
+   id_equipement INT,
+   libelle_equipement VARCHAR(50) NOT NULL,
+   PRIMARY KEY(id_equipement),
+   UNIQUE(libelle_equipement)
+);
+
+CREATE TABLE Utilisateur(
+   id_utilisateur INT,
+   email VARCHAR(50) NOT NULL,
+   nom VARCHAR(50) NOT NULL,
+   prenom VARCHAR(50) NOT NULL,
+   adresse VARCHAR(50) NOT NULL,
+   ville VARCHAR(50),
+   code_postal VARCHAR(5) NOT NULL,
+   password VARCHAR(250) NOT NULL,
+   PRIMARY KEY(id_utilisateur),
+   UNIQUE(email)
+);
+
+CREATE TABLE Traversée(
+   id_traversee INT,
+   date_depart DATETIME NOT NULL,
+   id_liaison INT NOT NULL,
+   id_bateau INT NOT NULL,
+   PRIMARY KEY(id_traversee),
+   FOREIGN KEY(id_liaison) REFERENCES Liaison(id_liaison),
+   FOREIGN KEY(id_bateau) REFERENCES Bateau(id_bateau)
+);
+
+CREATE TABLE Disponibilite(
+   id_dispo INT,
+   placesDispo INT NOT NULL,
+   id_traversee INT NOT NULL,
+   id_categorie INT NOT NULL,
+   PRIMARY KEY(id_dispo),
+   FOREIGN KEY(id_traversee) REFERENCES Traversée(id_traversee),
+   FOREIGN KEY(id_categorie) REFERENCES Categorie(id_categorie)
+);
+
+CREATE TABLE Réservation(
+   id_reservation INT,
+   montant_global DOUBLE NOT NULL,
+   id_traversee INT NOT NULL,
+   id_utilisateur INT NOT NULL,
+   PRIMARY KEY(id_reservation),
+   FOREIGN KEY(id_traversee) REFERENCES Traversée(id_traversee),
+   FOREIGN KEY(id_utilisateur) REFERENCES Utilisateur(id_utilisateur)
+);
+
+CREATE TABLE equipe(
+   id_bateau INT,
+   id_equipement INT,
+   PRIMARY KEY(id_bateau, id_equipement),
+   FOREIGN KEY(id_bateau) REFERENCES Bateau(id_bateau),
+   FOREIGN KEY(id_equipement) REFERENCES Equipement(id_equipement)
+);

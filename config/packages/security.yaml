@@ -1,0 +1,55 @@
+security:
+    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+    # Utilisé pour hash le mot de passe
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+
+    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+    # Provider = l'entité utilisé pour se connecter (Utilisateur)
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\Utilisateur
+                property: email
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            lazy: true
+            provider: app_user_provider
+            form_login:
+                # "app_login" est le nom de la route dans le controller Security
+
+                # login_path est la route où l'utilisateur est redirigé s'il tente d'accéder à une page protégée
+                login_path: app_login
+                # check_path est un firewall qui récupère les requêtes HTTP POST et qui procède à l'authentification
+                check_path: app_login
+                # Vérifie que les donnée sont reçues par un formulaire
+                form_only: true
+                # protège le formulaire contre les attaques CSRF (une attaque qui transmet à un utilisateur authentifié une requête HTTP falsifiée)
+                enable_csrf: true
+                # la route utilisée si aucune route précédente est trouvée
+                default_target_path: app_home
+                # HTTP_REFERER = entête http qui stocke l'url précédente de l'utilisateur
+                use_referer: true
+            logout:
+                path: app_logout
+                target: app_home
+            # sert à limiter les tentatives de connexions, ici 3 tentatives possibles toutes les 5 minutes
+            login_throttling:
+                max_attempts: 3
+                interval: '3 minutes'
+
+    # limiter les accès aux sites selon le rôle de l'utilisateur
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        # - { path: ^/utilisateur/test, roles: ROLE_ADMIN }
+        # - { path: ^/utilisateur, roles: ROLE_ADMIN }
+
+    # Hiérarchie des rôles
+    # On a déjà ajouté le ROLE_USER par défaut pour les utilisateurs authentifiés (voir entité Utilisateur méthode getRoles())
+    role_hierarchy:
+        # Un utilisateur avec le ROLE_ADMIN possède aussi le ROLE_USER
+        ROLE_ADMIN:       ROLE_USER
