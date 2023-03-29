@@ -12,7 +12,8 @@
         {{ form_row(registrationForm.adresse) }}
         {{ form_row(registrationForm.ville) }}
         {{ form_row(registrationForm.code_postal) }}
-        {{ form_row(registrationForm.password) }}
+        {{ form_row(registrationForm.password.first) }}
+        {{ form_row(registrationForm.password.second) }}
 
         {{ form_row(registrationForm.agreeTerms) }}
 
