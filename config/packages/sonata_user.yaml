@@ -1,0 +1,14 @@
+# config/packages/sonata_user.yaml
+
+sonata_user:
+    security_acl: true
+    impersonating:
+        route: sonata_admin_dashboard
+    class:
+        user: App\Entity\Admin
+    resetting:
+        email:
+            address: ryan.marsy@laposte.net
+            sender_name: MarieTeam Admin
+    profile:
+        default_avatar: bundles/sonatauser/default_avatar.png # Default avatar displayed if the user doesn't have one

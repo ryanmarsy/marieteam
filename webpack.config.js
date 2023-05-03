@@ -43,7 +43,7 @@ Encore
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
-    .enableVersioning(Encore.isProduction())
+    .enableVersioning()
 
     // configure Babel
     // .configureBabel((config) => {
@@ -57,7 +57,7 @@ Encore
     })
 
     // enables Sass/SCSS support
-    //.enableSassLoader()
+    .enableSassLoader()
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
@@ -71,6 +71,12 @@ Encore
 
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
-;
+
+    .copyFiles({
+        from: './assets/img',
+        to: 'images/[path][name].[hash:8].[ext]',
+        pattern: /\.(png|jpg|jpeg)$/
+    })
+    ;
 
 module.exports = Encore.getWebpackConfig();

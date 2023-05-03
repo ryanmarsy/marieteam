@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    default_locale: fr
 
 services:
     # default configuration for services in *this* file
@@ -22,3 +23,52 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    security.acl.permission.map:
+      class: Sonata\AdminBundle\Security\Acl\Permission\AdminPermissionMap
+
+    # --- SONATA ADMIN BUNDLE --- #
+  
+    admin.client:
+        class: App\Admin\ClientAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Client, controller: App\Controller\ClientAdminController, manager_type: orm, label: 'admin.groups.clients', translation_domain: 'messages'}
+
+    admin.bateau:
+        class: App\Admin\BateauAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Bateau, controller: App\Controller\BateauAdminController, manager_type: orm, group: admin, label: Bateau }
+
+    admin.reservation:
+        class: App\Admin\ReservationAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Reservation, controller: App\Controller\ReservationAdminController, manager_type: orm, group: admin, label: Reservation }
+
+    admin.liaison:
+        class: App\Admin\LiaisonAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Liaison, controller: App\Controller\LiaisonAdminController, manager_type: orm, group: admin, label: Liaison }
+
+    admin.traversee:
+        class: App\Admin\TraverseeAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Traversee, controller: App\Controller\TraverseeAdminController, manager_type: orm, group: admin, label: Traversee }
+
+    admin.categorie:
+        class: App\Admin\CategorieAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Categorie, controller: App\Controller\CategorieAdminController, manager_type: orm, group: admin, label: Categorie }
+
+    admin.reservation_categorie:
+        class: App\Admin\ReservationCategorieAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\ReservationCategorie, controller: App\Controller\ReservationCategorieAdminController, manager_type: orm, group: admin, label: ReservationCategorie }
+
+    admin.prix:
+        class: App\Admin\PrixAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Prix, controller: App\Controller\PrixAdminController, manager_type: orm, group: admin, label: Prix }
+
+    admin.equipement:
+        class: App\Admin\EquipementAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Equipement, controller: App\Controller\EquipementAdminController, manager_type: orm, group: admin, label: Equipement }

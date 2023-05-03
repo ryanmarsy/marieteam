@@ -2,17 +2,18 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'liaison')]
-#[ORM\Index(name: 'id_secteur', columns: ['id_secteur'])]
 #[ORM\Entity]
 class Liaison
 {
-    #[ORM\Column(name: 'id_liaison', type: 'integer', nullable: false)]
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    private $idLiaison;
+    private $id;
 
     #[ORM\Column(name: 'distance', type: 'float', precision: 10, scale: 0, nullable: false)]
     private $distance;
@@ -23,12 +24,17 @@ class Liaison
     #[ORM\Column(name: 'port_arrivee', type: 'string', length: 50, nullable: false)]
     private $portArrivee;
 
-    #[ORM\Column(name: 'id_secteur', type: 'integer', nullable: false)]
-    private $idSecteur;
+    #[ORM\OneToMany(mappedBy: 'liaison', targetEntity: Traversee::class, orphanRemoval: true)]
+    private Collection $lesTraversees;
 
-    public function getIdLiaison(): ?int
+    public function __construct()
     {
-        return $this->idLiaison;
+        $this->lesTraversees = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     public function getDistance(): ?float
@@ -67,17 +73,33 @@ class Liaison
         return $this;
     }
 
-    public function getIdSecteur(): ?int
+    /**
+     * @return Collection<int, Traversee>
+     */
+    public function getLesTraversees(): Collection
     {
-        return $this->idSecteur;
+        return $this->lesTraversees;
     }
 
-    public function setIdSecteur(int $idSecteur): self
+    public function addLesTraversee(Traversee $lesTraversee): self
     {
-        $this->idSecteur = $idSecteur;
+        if (!$this->lesTraversees->contains($lesTraversee)) {
+            $this->lesTraversees->add($lesTraversee);
+            $lesTraversee->setLiaison($this);
+        }
 
         return $this;
     }
 
+    public function removeLesTraversee(Traversee $lesTraversee): self
+    {
+        if ($this->lesTraversees->removeElement($lesTraversee)) {
+            // set the owning side to null (unless already changed)
+            if ($lesTraversee->getLiaison() === $this) {
+                $lesTraversee->setLiaison(null);
+            }
+        }
 
+        return $this;
+    }
 }

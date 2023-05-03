@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Utilisateur;
+use App\Entity\Client;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\IsTrue;
@@ -21,7 +21,7 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('email')
-            ->add('plainPassword', RepeatedType::class, [
+            ->add('plain_password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'mapped' => false,
                 'invalid_message' => 'The password fields must match.',
@@ -69,7 +69,7 @@ class RegistrationFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Utilisateur::class,
+            'data_class' => Client::class,
         ]);
     }
 }

@@ -1,0 +1,106 @@
+sonata_admin:
+    title: 'Marieteam'
+    dashboard:
+        blocks:
+            - { type: sonata.admin.block.admin_list, position: left }
+            - { position: right, type: sonata.block.service.text, settings: { content: '<h2>Welcome to the Dashboard</h2><br><p>This is the dashboard of the Sonata Admin Bundle.</p>' } }
+        groups:
+            client_list:
+                on_top: true
+                label: admin.groups.clients
+                translation_domain: messages
+                items:
+                    - admin.client
+                icon: 'fas fa-users'
+            admin_list:
+                on_top: true
+                label: admin.groups.admins
+                translation_domain: messages
+                items:
+                    - sonata.user.admin.user
+                icon: 'fas fa-user-tie'
+            ship_list:
+                on_top: true
+                label: admin.groups.ships
+                translation_domain: messages
+                items:
+                    - admin.bateau
+                icon: 'fas fa-ship'
+            booking_list:
+                on_top: true
+                label: admin.groups.bookings
+                translation_domain: messages
+                items:
+                    - admin.reservation
+                icon: 'fas fa-book-open'
+            booking_category_list:
+                on_top: true
+                label: admin.groups.bookings_categories
+                translation_domain: messages
+                items:
+                    - admin.reservation_categorie
+                icon: 'fas fa-sitemap'
+            connection_list:
+                on_top: true
+                label: admin.groups.connections
+                translation_domain: messages
+                items:
+                    - admin.liaison
+                icon: 'fas fa-anchor'
+            crossing_list:
+                on_top: true
+                label: admin.groups.crossings
+                translation_domain: messages
+                items:
+                    - admin.traversee
+                icon: 'fas fa-random'
+            categorie_list:
+                on_top: true
+                label: admin.groups.categories
+                translation_domain: messages
+                items:
+                    - admin.categorie
+                icon: 'fas fa-folder'
+            price_list:
+                on_top: true
+                label: admin.groups.crossings_prices
+                translation_domain: messages
+                items:
+                    - admin.prix
+                icon: 'fas fa-euro-sign'
+            equipment_list:
+                on_top: true
+                label: admin.groups.equipments
+                translation_domain: messages
+                items:
+                    - admin.equipement
+                icon: 'fas fa-wrench'
+            
+
+    security:
+        handler: sonata.admin.security.handler.acl
+
+        # this service MUST implement ``Sonata\AdminBundle\Util\AdminAclUserManagerInterface``.
+        acl_user_manager: App\Manager\AclUserManager
+
+        role_admin: ROLE_ADMIN
+        role_super_admin: ROLE_SUPER_ADMIN
+
+        # acl security information
+        information:
+            GUEST:    [VIEW, LIST]
+            STAFF:    [EDIT, HISTORY, LIST, CREATE]
+            EDITOR:   [OPERATOR, EXPORT]
+            ADMIN:    [MASTER]
+
+        # permissions not related to an object instance and also to be available when objects do not exist
+        # the DELETE admin permission means the user is allowed to batch delete objects
+        admin_permissions: [CREATE, LIST, DELETE, UNDELETE, EXPORT, OPERATOR, MASTER]
+
+        # permission related to the objects
+        object_permissions: [VIEW, EDIT, HISTORY, DELETE, UNDELETE, OPERATOR, MASTER, OWNER]
+
+sonata_block:
+    blocks:
+        sonata.admin.block.admin_list:
+            contexts: [admin]

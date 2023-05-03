@@ -5,15 +5,13 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'disponibilite')]
-#[ORM\Index(name: 'id_categorie', columns: ['id_categorie'])]
-#[ORM\Index(name: 'id_traversee', columns: ['id_traversee'])]
 #[ORM\Entity]
 class Disponibilite
 {
-    #[ORM\Column(name: 'id_dispo', type: 'integer', nullable: false)]
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    private $idDispo;
+    private $id;
 
     #[ORM\Column(name: 'placesDispo', type: 'integer', nullable: false)]
     private $placesdispo;
@@ -24,9 +22,9 @@ class Disponibilite
     #[ORM\Column(name: 'id_categorie', type: 'integer', nullable: false)]
     private $idCategorie;
 
-    public function getIdDispo(): ?int
+    public function getId(): ?int
     {
-        return $this->idDispo;
+        return $this->id;
     }
 
     public function getPlacesdispo(): ?int

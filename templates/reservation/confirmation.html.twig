@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Confirmation de réservation
+{% endblock %}
+
+{% block content %}
+  <div class="container my-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h3 class="card-title">Confirmation de réservation</h3>
+        <hr />
+
+        <div class="row">
+          <div class="col-sm-6">
+            <h5>Informations de la réservation :</h5>
+            <p>
+              <strong>Référence :</strong> {{ reservation.id }}
+            </p>
+            <p>
+              <strong>Client :</strong> {{ reservation.client.nom }} {{ reservation.client.prenom }}
+            </p>
+            <p>
+              <strong>Date de départ :</strong> {{ reservation.traversee.dateDepart|date('d/m/Y') }}
+            </p>
+            <p>
+              <strong>Heure de départ :</strong> {{ reservation.traversee.heureDepart|date('H:i') }}
+            </p>
+          </div>
+
+          <div class="col-sm-6">
+            <h5>Informations de paiement :</h5>
+            <p>
+              <strong>Total :</strong> {{ total }} €
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

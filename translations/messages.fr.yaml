@@ -1,0 +1,13 @@
+admin:
+  groups:
+    clients: "Clients"
+    admins: "Administrateurs"
+    ships: "Bateaux"
+    bookings: "Réservations"
+    connections: "Liaisons"
+    crossings: "Traversées"
+    categories: "Catégories"
+    bookings_categories: "Réservations (Catégories)"
+    crossings_prices: "Prix Catégories par Traversée"
+    equipments: "Equipements"
+  dashboard: "Tableau de bord"

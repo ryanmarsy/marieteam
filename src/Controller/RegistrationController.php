@@ -2,23 +2,21 @@
 
 namespace App\Controller;
 
-use App\Entity\Utilisateur;
+use App\Entity\Client;
 use App\Form\RegistrationFormType;
-use App\Repository\UtilisateurRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ClientRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UtilisateurRepository $utilisateurRepository): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, ClientRepository $clientRepository): Response
     {
-        $user = new Utilisateur();
+        $user = new Client();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
@@ -27,11 +25,11 @@ class RegistrationController extends AbstractController
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
-                    $form->get('plainPassword')->getData()
+                    $form->get('plain_password')->getData()
                 )
             );
 
-            $utilisateurRepository->save($user, true);
+            $clientRepository->save($user, true);
 
             return $this->redirectToRoute('app_home');
         }

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'bateau')]
@@ -9,10 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class Bateau
 {
-    #[ORM\Column(name: 'id_bateau', type: 'integer', nullable: false)]
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    private $idBateau;
+    private $id;
 
     #[ORM\Column(name: 'libelle_bateau', type: 'string', length: 50, nullable: false)]
     private $libelleBateau;
@@ -29,9 +31,21 @@ class Bateau
     #[ORM\Column(name: 'capaciteMaximum', type: 'integer', nullable: false)]
     private $capacitemaximum;
 
-    public function getIdBateau(): ?int
+    #[ORM\OneToMany(mappedBy: 'bateau', targetEntity: Traversee::class, orphanRemoval: true)]
+    private Collection $traversees;
+
+    #[ORM\ManyToMany(targetEntity: Equipement::class, mappedBy: 'bateau')]
+    private Collection $equipements;
+
+    public function __construct()
     {
-        return $this->idBateau;
+        $this->traversees = new ArrayCollection();
+        $this->equipements = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     public function getLibelleBateau(): ?string
@@ -94,5 +108,60 @@ class Bateau
         return $this;
     }
 
+    /**
+     * @return Collection<int, Traversee>
+     */
+    public function getTraversees(): Collection
+    {
+        return $this->traversees;
+    }
 
+    public function addTraversee(Traversee $traversee): self
+    {
+        if (!$this->traversees->contains($traversee)) {
+            $this->traversees->add($traversee);
+            $traversee->setBateau($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTraversee(Traversee $traversee): self
+    {
+        if ($this->traversees->removeElement($traversee)) {
+            // set the owning side to null (unless already changed)
+            if ($traversee->getBateau() === $this) {
+                $traversee->setBateau(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Equipement>
+     */
+    public function getEquipements(): Collection
+    {
+        return $this->equipements;
+    }
+
+    public function addEquipement(Equipement $equipement): self
+    {
+        if (!$this->equipements->contains($equipement)) {
+            $this->equipements->add($equipement);
+            $equipement->addBateau($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEquipement(Equipement $equipement): self
+    {
+        if ($this->equipements->removeElement($equipement)) {
+            $equipement->removeBateau($this);
+        }
+
+        return $this;
+    }
 }

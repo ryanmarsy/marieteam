@@ -2,31 +2,49 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'traversee')]
-#[ORM\Index(name: 'id_bateau', columns: ['id_bateau'])]
-#[ORM\Index(name: 'id_liaison', columns: ['id_liaison'])]
 #[ORM\Entity]
 class Traversee
 {
-    #[ORM\Column(name: 'id_traversee', type: 'integer', nullable: false)]
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    private $idTraversee;
+    private $id;
 
     #[ORM\Column(name: 'date_depart', type: 'datetime', nullable: false)]
     private $dateDepart;
 
-    #[ORM\Column(name: 'id_liaison', type: 'integer', nullable: false)]
-    private $idLiaison;
+    #[ORM\ManyToOne(inversedBy: 'lesTraversees')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Liaison $liaison = null;
 
-    #[ORM\Column(name: 'id_bateau', type: 'integer', nullable: false)]
-    private $idBateau;
+    #[ORM\Column(type: Types::TIME_MUTABLE)]
+    private ?\DateTimeInterface $heureDepart = null;
 
-    public function getIdTraversee(): ?int
+    #[ORM\OneToMany(mappedBy: 'traversee', targetEntity: Reservation::class, orphanRemoval: true)]
+    private Collection $reservations;
+
+    #[ORM\ManyToOne(inversedBy: 'traversees')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Bateau $bateau = null;
+
+    #[ORM\OneToMany(mappedBy: 'traversee', targetEntity: Prix::class, orphanRemoval: true)]
+    private Collection $prixes;
+
+    public function __construct()
     {
-        return $this->idTraversee;
+        $this->reservations = new ArrayCollection();
+        $this->prixes = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     public function getDateDepart(): ?\DateTimeInterface
@@ -41,29 +59,99 @@ class Traversee
         return $this;
     }
 
-    public function getIdLiaison(): ?int
+    public function getLiaison(): ?Liaison
     {
-        return $this->idLiaison;
+        return $this->liaison;
     }
 
-    public function setIdLiaison(int $idLiaison): self
+    public function setLiaison(?Liaison $liaison): self
     {
-        $this->idLiaison = $idLiaison;
+        $this->liaison = $liaison;
 
         return $this;
     }
 
-    public function getIdBateau(): ?int
+    public function getHeureDepart(): ?\DateTimeInterface
     {
-        return $this->idBateau;
+        return $this->heureDepart;
     }
 
-    public function setIdBateau(int $idBateau): self
+    public function setHeureDepart(\DateTimeInterface $heureDepart): self
     {
-        $this->idBateau = $idBateau;
+        $this->heureDepart = $heureDepart;
 
         return $this;
     }
 
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
 
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setTraversee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getTraversee() === $this) {
+                $reservation->setTraversee(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getBateau(): ?BATEAU
+    {
+        return $this->bateau;
+    }
+
+    public function setBateau(?BATEAU $bateau): self
+    {
+        $this->bateau = $bateau;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Prix>
+     */
+    public function getPrixes(): Collection
+    {
+        return $this->prixes;
+    }
+
+    public function addPrix(Prix $prix): self
+    {
+        if (!$this->prixes->contains($prix)) {
+            $this->prixes->add($prix);
+            $prix->setTraversee($this);
+        }
+
+        return $this;
+    }
+
+    public function removePrix(Prix $prix): self
+    {
+        if ($this->prixes->removeElement($prix)) {
+            // set the owning side to null (unless already changed)
+            if ($prix->getTraversee() === $this) {
+                $prix->setTraversee(null);
+            }
+        }
+
+        return $this;
+    }
 }
