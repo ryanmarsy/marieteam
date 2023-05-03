@@ -10,4 +10,6 @@ admin:
     bookings_categories: "Réservations (Catégories)"
     crossings_prices: "Prix Catégories par Traversée"
     equipments: "Equipements"
+    recommendations: "Recommandations"
+    countries: "Pays"
   dashboard: "Tableau de bord"

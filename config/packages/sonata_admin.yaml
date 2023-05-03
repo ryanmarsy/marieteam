@@ -75,6 +75,20 @@ sonata_admin:
                 items:
                     - admin.equipement
                 icon: 'fas fa-wrench'
+            recommendation_list:
+                on_top: true
+                label: admin.groups.recommendations
+                translation_domain: messages
+                items:
+                    - admin.recommandation
+                icon: 'fas fa-wrench'
+            country_list:
+                on_top: true
+                label: admin.groups.countries
+                translation_domain: messages
+                items:
+                    - admin.pays
+                icon: 'fas fa-wrench'
             
 
     security:

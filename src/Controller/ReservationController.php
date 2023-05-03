@@ -7,6 +7,7 @@ use App\Form\ReservationType;
 use App\Entity\ReservationCategorie;
 use App\Repository\CategorieRepository;
 use App\Form\ReservationConfirmationType;
+use App\Repository\RecommandationRepository;
 use App\Repository\ReservationRepository;
 use App\Service\PrixService;
 use Symfony\Component\HttpFoundation\Request;
@@ -117,11 +118,17 @@ class ReservationController extends AbstractController
     public function confirm(int $id, PrixService $prixService): Response
     {
         $reservation = $this->reservationRepository->find($id);
+
+        if (!$reservation)
+        {
+            $this->redirectToRoute('app_home');
+        }
         
         // Display the confirmation form
         return $this->render('reservation/confirmation.html.twig', [
             'reservation' => $reservation,
-            'total' => $prixService->calculerPrixTotal($reservation)
+            'total' => $prixService->calculerPrixTotal($reservation),
+            'recommandations' => $reservation?->getTraversee()?->getLiaison()?->getPays()?->getRecommandations()
         ]);
     }
 }

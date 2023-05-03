@@ -27,6 +27,10 @@ class Liaison
     #[ORM\OneToMany(mappedBy: 'liaison', targetEntity: Traversee::class, orphanRemoval: true)]
     private Collection $lesTraversees;
 
+    #[ORM\ManyToOne(inversedBy: 'liaisons')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Pays $pays = null;
+
     public function __construct()
     {
         $this->lesTraversees = new ArrayCollection();
@@ -99,6 +103,18 @@ class Liaison
                 $lesTraversee->setLiaison(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPays(): ?Pays
+    {
+        return $this->pays;
+    }
+
+    public function setPays(?Pays $pays): self
+    {
+        $this->pays = $pays;
 
         return $this;
     }

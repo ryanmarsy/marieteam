@@ -8,19 +8,18 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
-final class LiaisonAdmin extends AbstractAdmin
+final class RecommandationAdmin extends AbstractAdmin
 {
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
             ->add('id')
-            ->add('distance')
-            ->add('portDepart')
-            ->add('portArrivee')
-            ->add('pays.label')
+            ->add('textRecommandation')
             ;
     }
 
@@ -28,12 +27,7 @@ final class LiaisonAdmin extends AbstractAdmin
     {
         $list
             ->add('id')
-            ->add('distance')
-            ->add('portDepart')
-            ->add('portArrivee')
-            ->add('pays.label', null, [
-                'label' => 'Pays'
-            ])
+            ->add('textRecommandation')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
@@ -46,9 +40,8 @@ final class LiaisonAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
-            ->add('distance')
-            ->add('portDepart')
-            ->add('portArrivee')
+            ->add('textRecommandation', TextareaType::class)
+            ->add('pays', ModelListType::class)
             ;
     }
 
@@ -56,12 +49,7 @@ final class LiaisonAdmin extends AbstractAdmin
     {
         $show
             ->add('id')
-            ->add('distance')
-            ->add('portDepart')
-            ->add('portArrivee')
-            ->add('pays.label', null, [
-                'label' => 'Pays'
-            ])
+            ->add('textRecommandation')
             ;
     }
 }

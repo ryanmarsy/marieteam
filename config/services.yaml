@@ -72,3 +72,13 @@ services:
         class: App\Admin\EquipementAdmin
         tags:
             - { name: sonata.admin, model_class: App\Entity\Equipement, controller: App\Controller\EquipementAdminController, manager_type: orm, group: admin, label: Equipement }
+
+    admin.pays:
+        class: App\Admin\PaysAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Pays, controller: App\Controller\PaysAdminController, manager_type: orm, group: admin, label: Pays }
+
+    admin.recommandation:
+        class: App\Admin\RecommandationAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Recommandation, controller: App\Controller\RecommandationAdminController, manager_type: orm, group: admin, label: Recommandation }

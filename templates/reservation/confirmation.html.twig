@@ -34,6 +34,14 @@
               <strong>Total :</strong> {{ total }} €
             </p>
           </div>
+          <div class="col-12 text-center">
+            <h5>Recommandations du Pays de destination ({{ reservation.traversee.liaison.pays.label }}) :</h5>
+            {% for recommandation in recommandations %}
+            <p>
+              {{ recommandation.textRecommandation}}
+            </p>
+            {% endfor %}
+          </div>
         </div>
       </div>
     </div>

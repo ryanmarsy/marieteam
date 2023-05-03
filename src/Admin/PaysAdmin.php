@@ -10,17 +10,14 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-final class LiaisonAdmin extends AbstractAdmin
+final class PaysAdmin extends AbstractAdmin
 {
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
             ->add('id')
-            ->add('distance')
-            ->add('portDepart')
-            ->add('portArrivee')
-            ->add('pays.label')
+            ->add('label')
             ;
     }
 
@@ -28,12 +25,7 @@ final class LiaisonAdmin extends AbstractAdmin
     {
         $list
             ->add('id')
-            ->add('distance')
-            ->add('portDepart')
-            ->add('portArrivee')
-            ->add('pays.label', null, [
-                'label' => 'Pays'
-            ])
+            ->add('label')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
@@ -46,9 +38,7 @@ final class LiaisonAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
-            ->add('distance')
-            ->add('portDepart')
-            ->add('portArrivee')
+            ->add('label')
             ;
     }
 
@@ -56,12 +46,7 @@ final class LiaisonAdmin extends AbstractAdmin
     {
         $show
             ->add('id')
-            ->add('distance')
-            ->add('portDepart')
-            ->add('portArrivee')
-            ->add('pays.label', null, [
-                'label' => 'Pays'
-            ])
+            ->add('label')
             ;
     }
 }
